@@ -136,3 +136,18 @@ def test_max_selections_greater_than_one():
     selected_choices = question.select_choices([choice_a.id, choice_b.id, choice_c.id])
     
     assert selected_choices == [choice_a.id, choice_b.id, choice_c.id]
+
+@pytest.fixture
+def question_with_choices():
+    question = Question(title='Qual é a capital da França?')
+    question.add_choice('Paris', True)
+    question.add_choice('Londres', False)
+    question.add_choice('Berlim', False)
+    return question
+
+def test_number_of_choices(question_with_choices):
+    assert len(question_with_choices.choices) == 3  
+    
+def test_correct_choice(question_with_choices):
+    correct_choices = question_with_choices.select_choices([choice.id for choice in question_with_choices.choices if choice.is_correct])
+    assert correct_choices == [question_with_choices.choices[0].id]  
